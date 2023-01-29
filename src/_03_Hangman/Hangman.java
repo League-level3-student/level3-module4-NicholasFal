@@ -59,21 +59,32 @@ public class Hangman implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
+		boolean letterYet = false;
 		if(arg0.getSource() == button) {
+			// char c
+			// if(c == str.charAt(i)) {
+			
+			//}
 			String character = JOptionPane.showInputDialog("Enter a letter: ");
-			if(theWord.contains(character)) {
+			char c = character.charAt(0);
+			if(theWord.contains(character) && !guessedChars.contains(character)) {
 				int index = theWord.indexOf(character);
-				guessedChars.add(character);
 				blanks = "";
 				for(int i = 0; i < theWord.length(); i++) {
+					letterYet = false;
 					for(int j = 0; j < guessedChars.size(); j++) {
-						if(theWord.indexOf(guessedChars.get(j)) == i) {
+						if(guessedChars.get(j).charAt(0) == theWord.charAt(i) && !letterYet) {
+							//c == theWord.charAt(i)
 							blanks+=guessedChars.get(j);
+							letterYet = true;
 						}
 					}
-					if(index == i) {
+					if(c == theWord.charAt(i)) {
 						blanks+=character;
-					} else {
+						guessedChars.add(character);
+						letterYet = true;
+					} 
+					if(!letterYet) {
 					blanks+="_ ";
 					}
 				}
@@ -81,6 +92,12 @@ public class Hangman implements ActionListener {
 				label.setText(blanks);
 			} else {
 				System.out.println(theWord);
+				livesI--;
+				String livesS = Integer.toString(livesI);
+				lives.setText(livesS);
+				if(guessedChars.contains(character)) {
+					JOptionPane.showMessageDialog(null, "That letter has already been guessed");
+				}
 			}
 		}
 	}
