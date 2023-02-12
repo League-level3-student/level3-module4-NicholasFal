@@ -98,7 +98,38 @@ public class Hangman implements ActionListener {
 				if(guessedChars.contains(character)) {
 					JOptionPane.showMessageDialog(null, "That letter has already been guessed");
 				}
+				if(livesI == 0) {
+					String yesorno = JOptionPane.showInputDialog("You ran out of lives. The word was " + theWord + ". Would you like to play again?");
+					if(yesorno.equalsIgnoreCase("yes")) {
+						resetVariables();
+					}
+				}
+				if(!blanks.contains("_")) {
+					String yesorno = JOptionPane.showInputDialog("You guessed the word! Would you like to play again?");
+					if(yesorno.equalsIgnoreCase("yes")) {
+						resetVariables();
+					}
+				}
 			}
 		}
+	}
+	public void resetVariables() {
+		
+		blanks = "";
+		words = new Stack<String>();
+		guessedChars = new ArrayList<String>();
+		String stackNum = JOptionPane.showInputDialog("Choose a number from 1 to 266.");
+		int stackNumI = Integer.parseInt(stackNum);
+		for(int i = stackNumI; i > 0; i--) {
+			String word = Utilities.readRandomLineFromFile("dictionary.txt");
+			words.push(word);
+			}
+		theWord = words.pop();
+		for(int i = 0; i < theWord.length(); i++) {
+			blanks += "_ ";
+		}
+		label.setText(blanks);
+		livesI = 6;
+		livesS = Integer.toString(livesI);
 	}
 }

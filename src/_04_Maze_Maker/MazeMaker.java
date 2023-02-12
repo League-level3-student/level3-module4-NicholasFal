@@ -23,43 +23,50 @@ public class MazeMaker {
         //    This will be the starting point. Then select a random cell along
         //    the opposite wall and remove its exterior wall. This will be the
         //    finish line.
-        
-        // 2. select a random cell in the maze to start 
+        Cell cellStart = maze.getCell(0, randGen.nextInt(c));
+        Cell cellEnd = maze.getCell(r - 1, randGen.nextInt(c));
+        cellStart.setNorthWall(false);
+        cellEnd.setSouthWall(false);
+        // 2. select a random cell in the maze to stfart 
         
         // 3. call the selectNextPath method with the randomly selected cell
-
+        selectNextPath(maze.getCell(randGen.nextInt(r), randGen.nextInt(c)));
         return maze;
     }
 
     // 4. Complete the selectNextPathMethod
     private static void selectNextPath(Cell currentCell) {
         // A. SET currentCell as visited
-
+    	currentCell.hasBeenVisited();
         // B. check for unvisited neighbors using the cell
-
+    	ArrayList<Cell> unvisitedNeighbors = getUnvisitedNeighbors(currentCell);
         // C. if has unvisited neighbors,
-
+    	if(unvisitedNeighbors.size() > 0) {
         // C1. select one at random.
-
+    	Random ran = new Random();
+    	Cell randomCell = unvisitedNeighbors.get(ran.nextInt(unvisitedNeighbors.size()));
         // C2. push it to the stack
-
+    	uncheckedCells.push(randomCell);
         // C3. remove the wall between the two cells
-
+    	removeWalls(currentCell, randomCell);
         // C4. make the new cell the current cell and SET it as visited
-
+    	currentCell = randomCell;
+    	currentCell.setBeenVisited(true);
         // C5. call the selectNextPath method with the current cell
-
-
+    	selectNextPath(currentCell);
+    	}
         // D. if all neighbors are visited
-
+    	if(unvisitedNeighbors.size() == 0) {
         // D1. if the stack is not empty
-
+    	if(uncheckedCells.size() > 0) {
         // D1a. pop a cell from the stack
-
+    	currentCell = uncheckedCells.pop();
         // D1b. make that the current cell
-
+    	
         // D1c. call the selectNextPath method with the current cell
-
+    	selectNextPath(currentCell);
+    	}
+    	}
     }
 
     // This method will check if c1 and c2 are adjacent.
